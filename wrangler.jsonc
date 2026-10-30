@@ -1,23 +1,27 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "minilytics",
-  "main": "src/worker/index.ts",
-  "compatibility_date": "2025-09-01",
-  "observability": { "enabled": true },
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS",
-    "not_found_handling": "none",
-    // Static files skip the Worker. Anything else (client routes, unknown paths) runs it so missing pages return a real 404.
-    "run_worker_first": ["/api/*"]
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "minilytics",
-      // Replace with the id printed by `npx wrangler d1 create minilytics`.
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "migrations"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "minilytics",
+	"main": "src/worker/index.ts",
+	"compatibility_date": "2025-09-01",
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"not_found_handling": "none",
+		// Static files skip the Worker. Anything else (client routes, unknown paths) runs it so missing pages return a real 404.
+		"run_worker_first": [
+			"/api/*"
+		]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "minilytics",
+			// Replace with the id printed by `npx wrangler d1 create minilytics`.
+			"database_id": "c47826f5-22d1-4161-8257-1b3ca225a2e5",
+			"migrations_dir": "migrations"
+		}
+	]
 }
