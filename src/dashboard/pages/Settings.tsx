@@ -474,7 +474,7 @@ function AiSetup({ site, origin }: { site: Site; origin: string }) {
     <section className="card border-violet-200 bg-gradient-to-br from-violet-50 to-white p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">✨ Set up with AI</h2>
+          <h2 className="text-lg font-semibold">Set up with AI</h2>
           <p className="mt-1 text-sm text-stone-600">Paste into Claude Code or Cursor in your project. It does steps 1–3 for you.</p>
         </div>
         <CopyButton text={prompt} label="Copy AI prompt" className="btn-dark shrink-0" />

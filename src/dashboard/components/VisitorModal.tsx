@@ -91,13 +91,13 @@ export function VisitorModal({ visitorId, onClose }: { visitorId: string | null;
                         <span className="w-14 shrink-0 text-xs leading-5 text-stone-400">
                           {new Intl.DateTimeFormat('en', { timeZone: site.timezone, hour: 'numeric', minute: '2-digit' }).format(e.ts)}
                         </span>
-                        {e.type === 'pageview' && <span className="text-stone-700">📄 {e.path}</span>}
+                        {e.type === 'pageview' && <span className="text-stone-700">Page: {e.path}</span>}
                         {e.type === 'goal' && (
                           <span className="font-medium text-violet-700">
-                            🎯 {e.name} <span className="font-normal text-stone-400">on {e.path}</span>
+                            Goal: {e.name} <span className="font-normal text-stone-400">on {e.path}</span>
                           </span>
                         )}
-                        {e.type === 'outbound' && <span className="text-stone-600">↗ Left to {e.name?.replace(/^https?:\/\//, '')}</span>}
+                        {e.type === 'outbound' && <span className="text-stone-600">Left to {e.name?.replace(/^https?:\/\//, '')}</span>}
                       </li>
                     ))}
                     {pays.map((x) => (
@@ -105,7 +105,7 @@ export function VisitorModal({ visitorId, onClose }: { visitorId: string | null;
                         <span className="w-14 shrink-0 text-xs leading-5 text-stone-400">
                           {new Intl.DateTimeFormat('en', { timeZone: site.timezone, hour: 'numeric', minute: '2-digit' }).format(x.ts)}
                         </span>
-                        <span className="font-semibold text-revenue">💰 {x.kind === 'refund' ? 'Refund' : 'Paid'} {money(x.amount)}</span>
+                        <span className="font-semibold text-revenue">{x.kind === 'refund' ? 'Refund' : 'Paid'} {money(x.amount)}</span>
                       </li>
                     ))}
                   </ol>

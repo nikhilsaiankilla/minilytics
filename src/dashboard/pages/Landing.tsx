@@ -133,11 +133,11 @@ export function Landing() {
         <a href="#pricing" className="block bg-ink px-4 py-2 text-center text-sm text-white" data-ml-goal="pricing_cta" data-ml-goal-location="top-bar">
           {lastSold ? (
             <>
-              🔥 First {soldCount} sold out at <s>{lastSold.price}</s>. Now <b>{priceText}</b> · <b>{spots.left}</b> of {spots.total} spots left
+              First {soldCount} sold out at <s>{lastSold.price}</s>. Now <b>{priceText}</b> · <b>{spots.left}</b> of {spots.total} spots left
             </>
           ) : (
             <>
-              🎉 {lifetime ? 'Lifetime deal' : 'Founding offer'}: <b>{priceText}</b>, unlimited everything · <b>{spots.left}</b> of {spots.total} spots left
+              {lifetime ? 'Lifetime deal' : 'Founding offer'}: <b>{priceText}</b>, unlimited everything · <b>{spots.left}</b> of {spots.total} spots left
             </>
           )}
           {next ? `, then ${next}` : ''} →
@@ -200,12 +200,12 @@ export function Landing() {
       <Section eyebrow="The problem" title={<>Your analytics tells you <i>how many</i>. Not <i>who paid</i>.</>}>
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            ['📊', '200 reports, zero answers', 'Google Analytics can tell you about bounce rates in Belgium. It can’t tell you which post sold your product.'],
-            ['🫥', 'Visitors aren’t customers', '5,000 visitors from Reddit feels great, until you realise none of them paid. Traffic is a vanity metric without revenue next to it.'],
-            ['🕳️', 'Platforms hide the post', 'X, Medium and LinkedIn strip the link, so every tweet shows up as just “t.co”. You never learn which one worked.'],
+            ['01', '200 reports, zero answers', 'Google Analytics can tell you about bounce rates in Belgium. It can’t tell you which post sold your product.'],
+            ['02', 'Visitors aren’t customers', '5,000 visitors from Reddit feels great, until you realise none of them paid. Traffic is a vanity metric without revenue next to it.'],
+            ['03', 'Platforms hide the post', 'X, Medium and LinkedIn strip the link, so every tweet shows up as just “t.co”. You never learn which one worked.'],
           ].map(([icon, title, text]) => (
             <div key={title} className="card p-6">
-              <div className="text-3xl">{icon}</div>
+              <div className="text-3xl font-semibold text-revenue">{icon}</div>
               <h3 className="mt-3 text-lg font-semibold">{title}</h3>
               <p className="mt-2 text-stone-600">{text}</p>
             </div>
@@ -390,7 +390,7 @@ export function Landing() {
           )}
         </div>
         <div className="mt-6 flex items-center justify-center gap-2 text-sm text-stone-600">
-          <span className="text-lg">🛡️</span> 14-day money-back guarantee. No questions asked.
+          14-day money-back guarantee. No questions asked.
         </div>
       </Section>
 

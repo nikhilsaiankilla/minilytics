@@ -23,7 +23,7 @@ export function GoalsPanel({ totalVisitors }: { totalVisitors: number }) {
           ))}
         </div>
         {(tab === 'user' || tab === 'journey') && (
-          <input className="input max-w-[240px] py-1.5" placeholder="🔍 Search" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <input className="input max-w-[240px] py-1.5" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
         )}
       </div>
       {tab === 'goal' && <Goals totalVisitors={totalVisitors} />}
@@ -59,7 +59,7 @@ function Goals({ totalVisitors }: { totalVisitors: number }) {
       <tbody>
         {data.map((g) => (
           <tr key={g.label} className="cursor-pointer border-t border-stone-100 hover:bg-stone-50" onClick={() => addFilter('goal', g.label ?? '')} title="Filter by visitors who completed this goal">
-            <td className="px-3 py-2.5 font-medium">🎯 {g.label}</td>
+            <td className="px-3 py-2.5 font-medium">{g.label}</td>
             <td className="py-2.5 text-right">{fmtNumber(g.visitors)}</td>
             <td className="py-2.5 text-right">{fmtNumber(g.pageviews ?? 0)}</td>
             <td className="py-2.5 text-right">{totalVisitors ? fmtPct(g.visitors / totalVisitors, 1) : '—'}</td>
@@ -140,7 +140,7 @@ function Funnels() {
                 <div className="w-full rounded-xl bg-visitors/70 transition-all" style={{ height: `${Math.max(pct * 100, 2)}%` }} />
               </div>
               <div className="mt-2 truncate text-sm font-medium" title={s.value}>
-                {i + 1}. {s.type === 'goal' ? '🎯 ' : ''}
+                {i + 1}. {s.type === 'goal' ? 'Goal: ' : ''}
                 {s.value}
               </div>
               <div className="text-sm text-stone-600">

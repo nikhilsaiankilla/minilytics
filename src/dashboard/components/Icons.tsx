@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { persona } from '../../shared/names';
 import { domainForSource } from '../../shared/sources';
 import { flag } from '../lib/format';
 
-export function Favicon({ domain, size = 18, fallback }: { domain?: string | null; size?: number; fallback?: string }) {
+export function Favicon({ domain, size = 18, fallback }: { domain?: string | null; size?: number; fallback?: ReactNode }) {
   const [broken, setBroken] = useState(false);
   if (!domain || broken) {
     return (
@@ -42,17 +42,17 @@ export function SourceIcon({ source, domain, size }: { source: string | null; do
   return <Favicon domain={domainForSource(source) ?? domain ?? (source.includes('.') ? source : null)} size={size} />;
 }
 
-const CHANNEL_EMOJI: Record<string, string> = {
-  Direct: '🔗',
-  'Organic Search': '🔎',
-  'Organic Social': '💬',
-  AI: '✨',
-  Referral: '↗️',
-  Email: '✉️',
-  Paid: '💸',
+const CHANNEL_FALLBACK: Record<string, string> = {
+  Direct: 'D',
+  'Organic Search': 'S',
+  'Organic Social': 'S',
+  AI: 'AI',
+  Referral: 'R',
+  Email: 'E',
+  Paid: '$',
 };
 export function ChannelIcon({ channel }: { channel: string | null }) {
-  return <Favicon fallback={CHANNEL_EMOJI[channel ?? ''] ?? '•'} />;
+  return <Favicon fallback={CHANNEL_FALLBACK[channel ?? ''] ?? '•'} />;
 }
 
 const BROWSER_DOMAINS: Record<string, string> = {
@@ -88,13 +88,13 @@ const OS_DOMAINS: Record<string, string> = {
 };
 
 export function BrowserIcon({ name, size }: { name: string | null; size?: number }) {
-  return <Favicon domain={name ? BROWSER_DOMAINS[name] : null} size={size} fallback="🌐" />;
+  return <Favicon domain={name ? BROWSER_DOMAINS[name] : null} size={size} fallback="WEB" />;
 }
 export function OSIcon({ name, size }: { name: string | null; size?: number }) {
-  return <Favicon domain={name ? OS_DOMAINS[name] : null} size={size} fallback="💻" />;
+  return <Favicon domain={name ? OS_DOMAINS[name] : null} size={size} fallback="OS" />;
 }
 export function DeviceIcon({ name, size = 18 }: { name: string | null; size?: number }) {
-  return <Favicon size={size} fallback={name === 'Mobile' ? '📱' : name === 'Tablet' ? '📲' : '🖥️'} />;
+  return <Favicon size={size} fallback={name === 'Mobile' ? 'M' : name === 'Tablet' ? 'T' : 'D'} />;
 }
 export function Flag({ cc, size = 18 }: { cc: string | null; size?: number }) {
   return (
@@ -104,16 +104,19 @@ export function Flag({ cc, size = 18 }: { cc: string | null; size?: number }) {
   );
 }
 
-/** A friendly, stable avatar per visitor; matches their animal name ("brown fox" → 🦊). */
+/** A stable DiceBear portrait for each anonymous visitor. */
 export function Avatar({ id, size = 40 }: { id: string; size?: number }) {
   const p = persona(id);
   return (
-    <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full ring-2 ring-white"
-      style={{ width: size, height: size, background: p.color, fontSize: size * 0.55 }}
+    <img
+      src={p.avatarUrl}
+      alt=""
+      width={size}
+      height={size}
+      className="inline-flex shrink-0 rounded-full bg-stone-100 ring-2 ring-white"
+      style={{ backgroundColor: p.color }}
       title={p.name}
-    >
-      {p.emoji}
-    </span>
+      loading="lazy"
+    />
   );
 }

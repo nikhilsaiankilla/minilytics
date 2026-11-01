@@ -125,7 +125,7 @@ export function Toolbar({
             ))}
             <div className="my-1 border-t border-stone-100" />
             <button className={itemCls(false)} onClick={() => navigate(`/site/${site.id}/settings`)}>
-              ⚙️ Site settings & install
+              Site settings & install
             </button>
             <button className={itemCls(false)} onClick={() => navigate('/')}>
               ＋ All websites

@@ -76,8 +76,8 @@ export function bucketLabel(bucket: string, g: string, long = false): string {
 }
 
 export function flag(cc: string | null | undefined): string {
-  if (!cc || cc.length !== 2 || cc === 'XX' || cc === 'T1') return '🌐';
-  return String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 0x1f1a5 + c.charCodeAt(0)));
+  if (!cc || cc.length !== 2 || cc === 'XX' || cc === 'T1') return '—';
+  return cc.toUpperCase();
 }
 
 const regionNames = (() => {

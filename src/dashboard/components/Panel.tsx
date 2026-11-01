@@ -181,7 +181,7 @@ export function Panel({ tabs }: { tabs: TabDef[] }) {
       </div>
       {data && data.length > 10 && (
         <button className="mx-auto mt-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-ink" onClick={() => setDetails(true)}>
-          ⛶ Details
+          Details
         </button>
       )}
       <Modal open={details} onClose={() => setDetails(false)} title={tab.label} width="max-w-3xl">
