@@ -1,13 +1,14 @@
 import { Hono, type Context, type Next } from 'hono';
 import { cors } from 'hono/cors';
 import { handleEvent } from './collect';
-import { forgetSite, type AppEnv, type Site } from './env';
+import { forgetSite, type AppEnv, type Env, type Site } from './env';
 import { clearSession, currentUser, googleCallback, googleStart, isHosted, requireUser, setSession, siteAccessSql } from './auth';
 import { billingWebhook, checkout, planInfo } from './billing';
 import { passwordsMatch, randomId } from './lib/crypto';
 import { handleDodoWebhook, handleGoalApi, handlePaymentApi, handleStripeWebhook, learnDodoProducts, rematchPayments } from './payments';
 import { rememberOwnerDevice } from './owner';
 import { breakdown, customers, funnel, makeCtx, overview, realtime, sparklines, visitorProfile, visitors, type FunnelStep } from './stats';
+import { sendTrafficAlerts } from './telegram';
 
 const app = new Hono<AppEnv>();
 const MAX_FAILURES = 10;
@@ -218,7 +219,7 @@ app.post('/api/sites/:id/rotate-key', async (c) => {
 app.delete('/api/sites/:id', async (c) => {
   const id = c.get('site').id;
   await c.env.DB.batch(
-    ['events', 'sessions', 'visitors', 'payments', 'funnels'].map((t) =>
+    ['events', 'sessions', 'visitors', 'payments', 'funnels', 'telegram_alert_state'].map((t) =>
       c.env.DB.prepare(`DELETE FROM ${t} WHERE site_id = ?`).bind(id),
     ).concat(c.env.DB.prepare('DELETE FROM sites WHERE id = ?').bind(id)),
   );
@@ -310,4 +311,9 @@ app.all('*', async (c) => {
   return new Response(index.body, { status, headers });
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  scheduled(_controller: ScheduledController, env: Env) {
+    return sendTrafficAlerts(env);
+  },
+};

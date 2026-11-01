@@ -134,6 +134,28 @@ npm run deploy
 
 At 5–10k visitors a month you'll use a few percent of this. If you outgrow it, Cloudflare's Workers Paid plan is $5/month.
 
+### Optional Telegram traffic alerts
+
+For self-hosted installs, Minilytics can send a read-only Telegram alert when a site's traffic jumps: at least 10
+unique visitors in a completed 5-minute window and at least 3× the average 5-minute traffic over the previous hour.
+It checks every 5 minutes, sends at most one alert per site per hour, and does nothing until both Telegram secrets
+are set. Each check uses one indexed D1 query; there is no separate server or continuously running bot. Hosted SaaS
+mode is not supported because one configured chat would otherwise receive alerts across customer sites.
+
+1. Create a bot with [@BotFather](https://t.me/BotFather), message it `/start`, and get the chat ID for the destination.
+   Keep the bot token private.
+2. Set the secrets and redeploy:
+
+   ```bash
+   npx wrangler secret put TELEGRAM_BOT_TOKEN
+   npx wrangler secret put TELEGRAM_CHAT_ID
+   npm run deploy
+   ```
+
+The scheduled check and required database migration are included in the deployment. Alerts contain the site name, domain, recent visitor count, and baseline—no visitor-level information. To disable
+alerts, delete both secrets with `npx wrangler secret delete TELEGRAM_BOT_TOKEN` and
+`npx wrangler secret delete TELEGRAM_CHAT_ID`.
+
 ## Run it as a hosted SaaS (optional)
 
 By default Minilytics is single-user with a password. Set the Google values below and it becomes a hosted product:

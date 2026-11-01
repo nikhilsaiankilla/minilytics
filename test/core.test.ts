@@ -7,6 +7,7 @@ import type { Env } from '../src/worker/env';
 import { verifyStandardWebhook, verifyStripeWebhook } from '../src/worker/lib/crypto';
 import { bucketLabels, resolveRange, startOfDay, tzOffset } from '../src/worker/lib/time';
 import { isBot, parseUA } from '../src/worker/lib/ua';
+import { findTrafficSpikes } from '../src/worker/telegram';
 
 describe('classify', () => {
   it('maps t.co to X / social', () => {
@@ -66,6 +67,33 @@ describe('time ranges', () => {
   it('computes timezone offsets', () => {
     expect(tzOffset('Asia/Kolkata', now)).toBe(330 * 60_000);
     expect(tzOffset('UTC', now)).toBe(0);
+  });
+
+  describe('Telegram traffic spike detection', () => {
+    const windowEnd = Date.UTC(2026, 9, 23, 12, 0);
+    const currentBucket = Math.floor(windowEnd / (5 * 60_000)) - 1;
+    const row = (bucket: number, visitors: number, last_alert_at: number | null = null) => ({
+      site_id: 'site-1',
+      name: 'Example',
+      domain: 'example.com',
+      bucket,
+      visitors,
+      last_alert_at,
+    });
+
+    it('alerts only when recent visitors exceed both the minimum and historical baseline', () => {
+      const baseline = Array.from({ length: 12 }, (_, i) => row(currentBucket - 12 + i, 10));
+      expect(findTrafficSpikes([...baseline, row(currentBucket, 29)], windowEnd, windowEnd)).toEqual([]);
+      expect(findTrafficSpikes([...baseline, row(currentBucket, 30)], windowEnd, windowEnd)).toMatchObject([
+        { siteId: 'site-1', visitors: 30, baseline: 10 },
+      ]);
+    });
+
+    it('applies the minimum traffic threshold and per-site cooldown', () => {
+      expect(findTrafficSpikes([row(currentBucket, 9)], windowEnd, windowEnd)).toEqual([]);
+      expect(findTrafficSpikes([row(currentBucket, 10, windowEnd - 30 * 60_000)], windowEnd, windowEnd)).toEqual([]);
+      expect(findTrafficSpikes([row(currentBucket, 10, windowEnd - 61 * 60_000)], windowEnd, windowEnd)).toHaveLength(1);
+    });
   });
   it('starts "today" at local midnight', () => {
     const r = resolveRange({ period: 'today' }, 'Asia/Kolkata', 0, now);

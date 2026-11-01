@@ -5,6 +5,10 @@ export interface Env {
   ADMIN_PASSWORD: string;
   /** Random string used to sign the login cookie (`wrangler secret put SESSION_SECRET`). */
   SESSION_SECRET: string;
+  /** Optional Telegram bot token for self-hosted traffic spike alerts. */
+  TELEGRAM_BOT_TOKEN?: string;
+  /** Optional Telegram chat receiving self-hosted traffic spike alerts. */
+  TELEGRAM_CHAT_ID?: string;
 
   // ---- Hosted (SaaS) mode, all optional. Setting the two Google values turns it on.
   GOOGLE_CLIENT_ID?: string;
